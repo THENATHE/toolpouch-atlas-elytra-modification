@@ -1,3 +1,47 @@
+# Validation — 1.0.4+26.3
+
+Recorded 2026-10-03. Release SHA-256:
+
+`48c218887c60fe3628822d79b608aeb25fff1a12590de736e799ce4133f4566b`
+
+Target: Fabric Minecraft 26.3, original Tool Pouch 1.1.10, Tiered Backpacks 1.0.20 and optional ClientSort 3.104.1. Multi-Shim remains 1.0.3. This release uses the developer-release integration stack. **The SSO-port track is paused at the user's request and was not built or tested for this update.** Original mod JARs and dependencies remain unchanged. [Compile inputs](1.0.4/compile-inputs.json), [official ClientSort release metadata](1.0.4/clientsort-upstream-version.json).
+
+## ClientSort container support
+
+Tool Pouch and Tiered Backpacks menus use ClientSort's current chest policy when no explicit/inherited policy exists for the menu. This is an in-memory fallback; saved configuration is not rewritten. ClientSort continues to supply buttons, shortcuts, sort orders, operation policies, ignored slots, item-lock integration and client/server operation selection. Its default player-inventory refill policy hides directional refill buttons; enabling refill buttons on both sides displays them normally.
+
+ClientSort's generic LIGHT-item accessibility probe rejects restricted Tool Pouch slots. The integration recognizes those slots only at that probe call, retaining real-item validation. Client-side transfer/refill evaluates the live cursor and destination before each ordinary click, respecting per-slot capacity and allowlists. Inventory access stays on Minecraft's client thread while ClientSort's existing queue/rate control remains responsible for sequencing. Sort order and matching-transfer selection remain supplied by ClientSort.
+
+Tool Pouch's stack-count check now excludes the destination slot itself: refilling or replacing that slot does not consume an additional occupied-slot quota. New stacks remain limited. For accelerated pouch sorting, the original ClientSort policy/schema checks still run; a bounded server-thread permutation validates real destination acceptance and capacities, commits only a valid result, and restores exact original contents on rejection. Accelerated transfers repeat ClientSort’s original checked insertion while the source count decreases, so per-slot caps do not stop the transfer after a single empty slot. Client-side sort waits for an empty cursor; accelerated sorting leaves the cursor unchanged. Backpack restrictions and owning-container guards remain intact.
+
+| Profile | Result |
+| --- | --- |
+| Released addon 1.0.3 baseline | Missing bag-side buttons reproduced on all ten menu variants. [Evidence](1.0.4/clientsort-baseline.json). |
+| Final addon, ClientSort on client only | **90 operations and 7,864 authoritative server assertions** passed, plus six client policy checks. [Evidence](1.0.4/clientsort-native.json). |
+| Final addon, ClientSort on client and server | **90 operations and 7,864 authoritative server assertions** passed, plus six policy checks and seven server validation/rollback groups. The fixture observed 120 real ServerOperator constructions across those operations. [Evidence](1.0.4/clientsort-accelerated.json). |
+
+The ten variants are ordinary/netherite pouches in inventory and attached to leggings, plus all six backpack tiers. Each runs container sort, player-inventory sort, refill/matching-transfer/bulk-transfer in both directions, and occupied-cursor sorting. Tests verify exact item conservation, slot caps, stack-count quotas, prohibited items, owning-container protection, unchanged carried items and sorted physical-slot persistence after closing/reopening. Normal ClientSort buttons are clicked; refill uses its operation entry point under default keybind-only preferences and real refill widgets in the enabled-button profile. Native operations use real networking; the seven malformed-request/rollback groups exercise the helper directly.
+
+Representative pouch and backpack screens were rendered and inspected in both final profiles. Default policy shows three controls per group; enabling the player-inventory refill-button preference shows four, including matching transfer. [Native pouch](1.0.4/screenshots/clientsort-native-attached-netherite-pouch.png), [native backpack](1.0.4/screenshots/clientsort-native-netherite-backpack.png), [accelerated pouch with refill](1.0.4/screenshots/clientsort-accelerated-attached-netherite-pouch.png), [accelerated backpack with refill](1.0.4/screenshots/clientsort-accelerated-netherite-backpack.png).
+
+## Regression without ClientSort
+
+The final `48c218…` binary passed **178 native capacity/conservation checks** with ClientSort absent on both client and server, including default/custom pouch dimensions and attachment lifecycle. [Final evidence](1.0.4/no-clientsort-final-capacity.json).
+
+Before the final two ClientSort-only corrections, candidate `b3454d135071306e795e73f961a3b777b6056be8a4721ccb2b5013807302992a` passed controls/flight **101 checks with MapStitch** and **101 without**, and developer-SSO Mending **46 checks enabled** and **46 disabled**, all without ClientSort installed. Those records retain that exact candidate hash: [controls with MapStitch](1.0.4/no-clientsort-elytra-with-mapstitch.json), [controls without MapStitch](1.0.4/no-clientsort-elytra-without-mapstitch.json), [Mending enabled](1.0.4/no-clientsort-xp-enabled.json), [Mending disabled](1.0.4/no-clientsort-xp-disabled.json).
+
+All **26 non-ClientSort classes are byte-for-byte identical** between that candidate and the final release, including existing gameplay features, shared pouch quota correction and mixin gating. The final changes are the guarded ClientSort server-transfer mixin and client sorting cursor guard; final absence testing above confirms optional loading. [Bytecode comparison](1.0.4/original-feature-bytecode.json). These broader results are not represented as fresh runs of the final binary.
+
+## Reproduction and limits
+
+The [native ClientSort fixture](../qa/clientsort/README.md) records the actual client/server artifacts, controls, operations and conservation checks. Tests use disposable local worlds and configurations. Original JARs, raw launch commands and test worlds remain excluded from published source.
+
+Coverage is specific to ClientSort 3.104.1 and the original mod versions above. Arbitrary third-party GUI replacements, accessory mods and item-lock mod runtimes are not certified. Their existing ClientSort selection hooks remain in place. The integration does not give vanilla clients native pouch/backpack gameplay. The addon still installs on both server and participating native clients; ClientSort is optional, and its own server installation enables acceleration.
+
+Build uses Java 25 Gradle with a JDK 27 compiler targeting Java 25 bytecode. Prior release artifacts and historical validation remain preserved below; old results are not relabeled as new tests.
+
+---
+
 # Validation — 1.0.3+26.3
 
 Recorded 2026-10-03. Exact addon SHA-256:

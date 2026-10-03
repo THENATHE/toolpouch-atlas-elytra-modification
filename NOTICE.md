@@ -19,6 +19,10 @@ The atlas bridge, lookup ordering, and map-ejection routines adapt the original 
 
 See `AtlasBridge`, `AtlasClientLookupMixin`, `AtlasEjectionMixin`, `PlayerPreferenceMixin`, `ServerPlayerPreferenceMixin`, and `PouchFlightMixin` for these adaptations. Compatibility changes belong to this add-on; the original gameplay systems remain supplied by the upstream mods.
 
+## ClientSort integration
+
+ClientSort is by TerminalMC / NotRyken: https://github.com/TerminalMC/ClientSort, licensed under Apache-2.0. The addon integrates with its policies, controls, sort orders and operation handling; ClientSort itself is supplied separately and remains optional. Tiered Backpacks is by pajic: https://github.com/pajicadvance/tiered_backpacks. Neither project endorses this unofficial addon.
+
 ## Distribution
 
 Original mod JARs and development dependencies are not committed or bundled. Users obtain those separately from their authors. This add-on applies runtime mixins and leaves the installed original JAR files unchanged. The companion Polymer shim is a separate project: https://github.com/THENATHE/toolpouch-polymer-shim.

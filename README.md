@@ -4,6 +4,8 @@ An **unofficial gameplay modification** for [Tool Pouch](https://github.com/paji
 
 **Minecraft 26.3 · Fabric · Tool Pouch 1.1.10 · Optional MapStitch 1.1.6**
 
+**1.0.4 adds optional ClientSort support for Tool Pouch and Tiered Backpacks:** chest-style sort, refill and transfer controls with native storage restrictions preserved.
+
 [Download the modification](https://github.com/THENATHE/toolpouch-atlas-elytra-modification/releases/latest) · [Companion Polymer shim](https://github.com/THENATHE/toolpouch-polymer-shim) · [Validation](docs/VALIDATION.md)
 
 Tool Pouch and MapStitch are original projects by **pajic**. This repository contains the additional integration code, not the original mods. It is independently maintained by THENATHE and is not an official upstream release. Attribution and retained MIT notices are in [NOTICE.md](NOTICE.md) and [licenses/](licenses/).
@@ -43,9 +45,19 @@ Version 1.0.3 preserves the netherite pouch’s configured dimensions when attac
 
 Detaching a pouch clears its tier marker from the leggings. Attaching another pouch derives its tier from the actual ingredient, preventing a stale marker from turning an ordinary pouch into a netherite one. Existing configuration values and other item components remain intact. The fix prevents further truncation; it cannot recover contents already discarded by the original smaller inventory.
 
+### ClientSort support
+
+Version 1.0.4 adds optional [ClientSort](https://github.com/TerminalMC/ClientSort) support to Tool Pouch and Tiered Backpacks. Their native menus inherit ClientSort's chest policy for sort, refill, matching transfer and transfer, unless an explicit or inherited container policy already exists. Your saved policies, sort orders, ignored/locked slots and button preferences remain in control; the addon does not rewrite ClientSort configuration.
+
+Install **ClientSort 3.104.1 for Fabric 26.3 on the client** to use this integration. ClientSort on the server is optional and enables its accelerated operations. Keep this addon on both server and native clients as usual. Without ClientSort, the addon keeps its existing features.
+
+ClientSort only displays directional buttons when enabled for both participating inventories. If the refill button is hidden, enable it for the player inventory as well as the container in ClientSort's settings; its default player-inventory refill policy is keybind-only. Normal ClientSort shortcuts also work.
+
+Pouch allowlists, per-slot stack sizes, stack-count limits and backpack nesting rules remain enforced. A partial stack already occupying an allowed pouch slot can be refilled without consuming another slot quota. Client-side transfers use live cursor/slot state rather than assuming an entire stack was accepted. Accelerated pouch sorting validates the destination contents and restores the original state if a request cannot be applied.
+
 ## Install
 
-Install `toolpouch-atlas-elytra-compat-1.0.3+26.3.jar` on **the server and participating modded clients**, alongside Tool Pouch 1.1.10 and its usual dependencies. Add MapStitch 1.1.6 when using the atlas features. The Elytra toggle works without MapStitch.
+Install `toolpouch-atlas-elytra-compat-1.0.4+26.3.jar` on **the server and participating modded clients**, alongside Tool Pouch 1.1.10 and its usual dependencies. Add MapStitch 1.1.6 when using the atlas features. The Elytra toggle works without MapStitch.
 
 | Dependency | Tested version | Role |
 | --- | --- | --- |
@@ -55,6 +67,8 @@ Install `toolpouch-atlas-elytra-compat-1.0.3+26.3.jar` on **the server and parti
 | Fzzy Config | 0.7.7+fix2+26.3 | Tool Pouch configuration dependency |
 | Fabric Language Kotlin | 1.14.1+kotlin.2.4.20 | Required by the tested dependency stack |
 | MapStitch | 1.1.6 for 26.3 | Optional atlas integration |
+| ClientSort | 3.104.1 for 26.3 | Optional container sorting, refill and transfer |
+| Tiered Backpacks | 1.0.20 for 26.3 | Optional backpack target for ClientSort integration |
 
 Use one Tool Pouch JAR and one MapStitch JAR, with matching mod builds on the server and native clients. This add-on does not contain or replace either original mod.
 
@@ -78,6 +92,7 @@ Startup feature detection inspects the installed mods before applying the releva
 | --- | --- |
 | [Tool Pouch](https://github.com/pajicadvance/toolpouch) | Active pouch selection, stored contents, allowed-item rules, flight lookup, durability behavior, and player preference persistence. |
 | [MapStitch](https://github.com/pajicadvance/mapstitch) | Stored atlas ticking, saveback, ejection, minimap/world-map lookup, and compass/clock discovery. |
+| [ClientSort](https://github.com/TerminalMC/ClientSort) | Chest policies and safe operations for Tool Pouch and Tiered Backpacks menus, including optional server acceleration. |
 
 [Tool Pouch Polymer Shim](https://github.com/THENATHE/toolpouch-polymer-shim) is the tested companion for mixed native/vanilla servers; it is not a required dependency or a dedicated mixin target here. Support for accessory slots is inherited through Tool Pouch. This project does not claim new dedicated layers for Trinkets, Curios, Ohmega, Aileron, or Shared Region Maps.
 
@@ -89,6 +104,6 @@ Use a Java 25 JDK. Place the compile-only dependency JARs listed in [libs/README
 ./gradlew build
 ```
 
-Windows: `gradlew.bat build`. Output: `build/libs/toolpouch-atlas-elytra-compat-1.0.3+26.3.jar`. Dependencies are not bundled. A newer compiler can target Java 25 with `-PcompilerVersion=27` while Gradle runs on Java 25.
+Windows: `gradlew.bat build`. Output: `build/libs/toolpouch-atlas-elytra-compat-1.0.4+26.3.jar`. Dependencies are not bundled. A newer compiler can target Java 25 with `-PcompilerVersion=27` while Gradle runs on Java 25.
 
-Version 1.0.3 adds native attached-capacity and tier-lifecycle regressions. Version 1.0.2 added actual XP-orb pickup tests, SSO-enabled/disabled controls, XP accounting, live-menu persistence and existing controls/atlas regressions. The original 1.0.0 record retains its 208 historical assertions. Read [the validation record](docs/VALIDATION.md) for exact tested artifacts, results and limits. Report problems specific to this modification in [this repository's issues](https://github.com/THENATHE/toolpouch-atlas-elytra-modification/issues).
+Version 1.0.4 adds native ClientSort operation, policy and item-conservation regressions. Version 1.0.3 added native attached-capacity and tier-lifecycle regressions. Version 1.0.2 added actual XP-orb pickup tests, SSO-enabled/disabled controls, XP accounting, live-menu persistence and existing controls/atlas regressions. The original 1.0.0 record retains its 208 historical assertions. Read [the validation record](docs/VALIDATION.md) for exact tested artifacts, results and limits. Report problems specific to this modification in [this repository's issues](https://github.com/THENATHE/toolpouch-atlas-elytra-modification/issues).

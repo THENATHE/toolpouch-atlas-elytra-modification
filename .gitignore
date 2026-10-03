@@ -21,3 +21,8 @@ __pycache__/
 qa/attached-capacity/runs/
 qa/attached-capacity/**/classes/
 qa/attached-capacity/**/fixtures/
+
+!qa/clientsort/
+qa/clientsort/runs/
+qa/clientsort/fixtures/
+qa/clientsort/**/classes/

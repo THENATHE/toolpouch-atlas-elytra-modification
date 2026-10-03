@@ -2,5 +2,5 @@
  "required":true,"package":"com.thenathe.toolpouchcompat.mixin","compatibilityLevel":"JAVA_25",
  "plugin":"com.thenathe.toolpouchcompat.CompatMixinPlugin",
  "mixins":["PlayerPreferenceMixin","ServerPlayerPreferenceMixin","PouchFlightMixin","AtlasPlayerMixin","AtlasMapDataMixin","AtlasEjectionMixin"],
- "client":["AtlasClientLookupMixin","AtlasWorldMapMixin"],"injectors":{"defaultRequire":1}
+ "client":["AtlasClientLookupMixin","AtlasWorldMapMixin","AtlasMinimapCacheMixin"],"injectors":{"defaultRequire":1}
 }

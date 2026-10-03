@@ -19,9 +19,11 @@ Tool Pouch and MapStitch are original projects by **pajic**. This repository con
 - Respects inventory-use settings, atlas scanning settings, and the pouch selection supplied by Tool Pouch's own accessory abstraction.
 - Migrates eligible legacy `improved-maps:atlas` allowance limits to `mapstitch:atlas` once. Existing MapStitch rules, migrated version-2 configurations, custom limits, and later administrator removals are preserved. This is a configuration migration, not a new Improved Maps integration.
 
+- Invalidates cached minimap map centers when the client world or atlas metadata changes, avoiding stale locations after world transitions.
+
 ### Elytra toggle
 
-- Adds an initially unbound **Toggle Tool Pouch Elytra** key under Tool Pouch controls, preserving the key identifier used by the earlier combined patch.
+- Adds an initially unbound **Toggle Tool Pouch Elytra** key under the existing Tool Pouch controls heading, preserving the key identifier used by the earlier combined patch. Version 1.0.1 fixes the duplicate heading by sharing the original category object.
 - Adds `/toolpouch-elytra`, `/toolpouch-elytra on`, and `/toolpouch-elytra off` for your own pouch flight preference.
 - Saves the preference per player, copies it on respawn, and synchronizes it to clients that have this modification. Synchronization is refreshed after player level changes.
 - Disabling pouch flight leaves the wings stored and visible. Normal chest-slot Elytra remain usable with their normal durability handling.
@@ -29,7 +31,7 @@ Tool Pouch and MapStitch are original projects by **pajic**. This repository con
 
 ## Install
 
-Install `toolpouch-atlas-elytra-compat-1.0.0+26.3.jar` on **the server and participating modded clients**, alongside Tool Pouch 1.1.10 and its usual dependencies. Add MapStitch 1.1.6 when using the atlas features. The Elytra toggle works without MapStitch.
+Install `toolpouch-atlas-elytra-compat-1.0.1+26.3.jar` on **the server and participating modded clients**, alongside Tool Pouch 1.1.10 and its usual dependencies. Add MapStitch 1.1.6 when using the atlas features. The Elytra toggle works without MapStitch.
 
 | Dependency | Tested version | Role |
 | --- | --- | --- |
@@ -41,6 +43,8 @@ Install `toolpouch-atlas-elytra-compat-1.0.0+26.3.jar` on **the server and parti
 | MapStitch | 1.1.6 for 26.3 | Optional atlas integration |
 
 Use one Tool Pouch JAR and one MapStitch JAR, with matching mod builds on the server and native clients. This add-on does not contain or replace either original mod.
+
+For missing atlas seed-map centers and crafting corrections on a Multi-Shim server, also update [Multi-Shim](https://github.com/THENATHE/SSO-backpack-toolpouch-mapstitch-shim) to 1.0.2. The addon fixes the client controls/cache; the server shim repairs existing atlas metadata and crafting.
 
 ### Vanilla players on the same server
 
@@ -71,6 +75,6 @@ Use a Java 25 JDK. Place the compile-only dependency JARs listed in [libs/README
 ./gradlew build
 ```
 
-Windows: `gradlew.bat build`. Output: `build/libs/toolpouch-atlas-elytra-compat-1.0.0+26.3.jar`. Dependencies are not bundled. A newer compiler can target Java 25 with `-PcompilerVersion=27` while Gradle runs on Java 25.
+Windows: `gradlew.bat build`. Output: `build/libs/toolpouch-atlas-elytra-compat-1.0.1+26.3.jar`. Dependencies are not bundled. A newer compiler can target Java 25 with `-PcompilerVersion=27` while Gradle runs on Java 25.
 
-The release passed **208 automated assertions** across standalone server behavior, native keybind/networking/persistence, and native atlas rendering with Polymer enabled. Read [the validation record](docs/VALIDATION.md) for the tested combinations and limits. Report problems specific to this modification in [this repository's issues](https://github.com/THENATHE/toolpouch-atlas-elytra-modification/issues).
+Version 1.0.1 has expanded native controls, command, dimension-change, restart and atlas-cache regression coverage. The original 1.0.0 record retains its 208 historical assertions. Read [the validation record](docs/VALIDATION.md) for exact tested artifacts, results and limits. Report problems specific to this modification in [this repository's issues](https://github.com/THENATHE/toolpouch-atlas-elytra-modification/issues).

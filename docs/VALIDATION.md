@@ -1,3 +1,25 @@
+# Validation — 1.0.1+26.3
+
+Recorded 2026-10-02 for Fabric Minecraft 26.3. Release SHA-256:
+
+`77dc668b164bca182eec1e558b2948bd98ee40545ef30881bcdd471f43af1b0a`
+
+| Scenario | Result |
+| --- | --- |
+| Original addon controls baseline | Actual vanilla KeyBindsList contained two Tool Pouch headings. [Evidence](keybind-heading-baseline.json). |
+| Final addon with original Tool Pouch and MapStitch | 101 assertions passed: exactly one heading, one registered toggle sharing the original category; normal key/payload state, inventory/leggings flight, cosmetic wings, chest-slot fallback, respawn, full restart/rejoin, nonoperator on/off/toggle commands, and real Nether transition resynchronization. [Evidence](keybind-elytra-with-mapstitch.json). |
+| Final addon without optional MapStitch | The same 101 assertions passed, independently exercising optional mixin gating. [Evidence](keybind-elytra-without-mapstitch.json). |
+
+These tests used the exact addon above and combined-shim candidate `fc756498299259767766054a9c817a4d183c7467c5b62c342eadde92b8554926`. The server's later capacity-preserving atlas repair change does not change addon bytecode or its elytra paths. Exact server/client dependency hashes are retained in each result. The final atlas integration used this addon with release server SHA `d71a659db9c2025542953839facc5263cf2f80085644608a753913d50786e7d4` and passed 39 client plus 38 server assertions: actual minimap/world-map rendering and terrain updates in inventory/leggings pouches, authoritative native crafting, metadata/large-content preservation, and world-transition cache invalidation. [Exact atlas evidence](atlas.json), [baseline reproductions](atlas-baseline.json). The cache test uses a stale non-atlas sentinel and a deliberately wrong center during real Nether travel, then verifies reconstruction on return; a legitimately repopulated cache is allowed.
+
+The client cache fix invalidates minimap centers when the client world or atlas metadata changes. It is independently gated by MapStitch's presence, including installations with an already-integrated pouch bridge. Original Tool Pouch and MapStitch JARs are unchanged. The original dependencies, saved preferences and key identifier are preserved.
+
+Reproducible current fixtures: [Multi-Shim addon QA](https://github.com/THENATHE/SSO-backpack-toolpouch-mapstitch-shim/tree/main/qa/addon). They use disposable localhost profiles and the workspace's existing game libraries; original game/mod JARs, worlds and raw launch audits are not republished.
+
+Not tested: physical keyboard hardware, sustained rocket flight, third-party accessory/Aileron integrations, arbitrary client mods, or all server configurations. The standalone original-addon checks below are historical 1.0.0 results, not claimed as fresh 1.0.1 runs.
+
+---
+
 # Validation — 1.0.0+26.3
 
 Recorded 2026-09-30 for Fabric Minecraft 26.3. Release SHA-256:

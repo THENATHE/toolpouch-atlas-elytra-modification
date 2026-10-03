@@ -7,6 +7,7 @@ public final class CompatMixinPlugin implements IMixinConfigPlugin {
  public void onLoad(String mixinPackage) {}
  public String getRefMapperConfig() { return null; }
  public boolean shouldApplyMixin(String target, String mixin) {
+  if (mixin.endsWith(".PouchCapacityMixin") || mixin.endsWith(".PouchAttachmentTierMixin") || mixin.endsWith(".PouchDetachmentTierMixin")) return true;
   if (mixin.substring(mixin.lastIndexOf('.') + 1).startsWith("PouchMending")) return true;
   if (mixin.endsWith(".AtlasMinimapCacheMixin")) return FabricLoader.getInstance().isModLoaded("mapstitch");
   if (mixin.substring(mixin.lastIndexOf('.') + 1).startsWith("Atlas"))

@@ -1,3 +1,51 @@
+# Validation — 1.0.3+26.3
+
+Recorded 2026-10-03. Exact addon SHA-256:
+
+`17b19dbaaaa5a82c659600fa8dbe3fef1e4bcd878df90c81d291e6f0b19b8513`
+
+Target: original developer Tool Pouch 1.1.10+26.3, Minecraft 26.3, Java 25, Fabric Loader 0.19.5 and Fabric API 0.161.0+26.3. The separate Multi-Shim stays at 1.0.3. Original JARs and dependencies remain unchanged. [Compile input inventory](1.0.3/compile-inputs.json).
+
+## Attached netherite capacity and tier lifecycle
+
+The original Tool Pouch dimension helpers check whether the holder itself is the netherite pouch item. Attached pouches are represented by leggings with container and tier components, so they incorrectly use ordinary pouch dimensions (4×4 instead of 5×5 by default). Both menu construction and internal inventory helpers allocate that smaller container, which can truncate items in the upper slots when contents are saved.
+
+The addon now recognizes attached leggings carrying the existing netherite tier marker and returns the configured netherite rows and columns on both client and server. Standalone pouches, ordinary attachments, item identity and configuration values remain unchanged. Menus, previews, quick-move and internal storage helpers share those corrected dimensions. These fixes apply independently of MapStitch and the optional integrated-toggle detector.
+
+A second upstream lifecycle fault leaves the tier marker on leggings after detachment. Reattaching an ordinary pouch can then incorrectly produce a netherite pouch on the next detachment. The addon removes the detached marker and normalizes each attachment from its actual crafting ingredient; it does not rely on the recipe singleton's cached ingredient. Contents, dye and other armor components remain owned by the original recipes.
+
+| Profile | Result |
+| --- | --- |
+| Old addon 1.0.2, original Tool Pouch without Polymer | 146 baseline checks reproduced both faults. Attached netherite opened 16 instead of 25 slots and lost nine stored items on close; custom settings opened six instead of 35 and lost 29. Standalone and ordinary attached controls retained their contents. [Evidence](1.0.3/capacity-baseline.json). |
+| Fixed addon, developer SSO / Multi-Shim stack | All 178 checks passed across eight native scenarios. [Evidence](1.0.3/capacity-developer.json). |
+| Fixed addon, existing SSO-port / Multi-Shim stack | All 178 checks independently passed with the port's dependency set. [Evidence](1.0.3/capacity-sso-port.json). |
+
+The eight cases cover standalone and leggings-attached ordinary/netherite pouches, each with default dimensions (16/25 slots) and custom dimensions (6/35). Actual client screen packets and inventory clicks withdraw and redeposit the last slot, then close/reopen; server and client agree on capacity. Internal last-slot replacement preserves sibling items. Serialization, full stored-item counts, empty cursors, detachment, dye preservation and stale-marker reattachment are checked. Negative controls reject netherite sizing for a false marker, bare leggings and non-armor items. Original recipe APIs construct/detach holders; these checks do not claim a full crafting-screen interaction test. See the [fixture and retained screenshots](../qa/attached-capacity/README.md).
+
+## Existing feature regressions
+
+| Check | Result |
+| --- | --- |
+| Controls/flight with MapStitch | 101 checks passed, including restart and dimension synchronization. [Evidence](1.0.3/elytra-with-mapstitch.json). |
+| Controls/flight without MapStitch | 101 checks passed independently. [Evidence](1.0.3/elytra-without-mapstitch.json). |
+| Atlas/minimap integration | 39 client and 38 server checks passed. [Evidence](1.0.3/atlas.json). |
+| XP Mending: developer SSO | 46 checks passed with regular Mending [disabled](1.0.3/xp-developer-disabled.json), and 46 with it [enabled](1.0.3/xp-developer-enabled.json). |
+| XP Mending: existing SSO port | 46 checks passed with regular Mending [disabled](1.0.3/xp-sso-port-disabled.json), and 46 with it [enabled](1.0.3/xp-sso-port-enabled.json). |
+| Enabled-Mending process restarts | Saved durability/XP and client agreement passed on [developer](1.0.3/xp-developer-enabled-reconnect.json) and [SSO-port](1.0.3/xp-sso-port-enabled-reconnect.json) profiles. |
+| Mixed-server vanilla guard | 1,767 server storage/serialization assertions plus an actual vanilla client connection/guard check passed. [Evidence](1.0.3/vanilla-guard.json). |
+
+These regression profiles retain Multi-Shim 1.0.3 and use official Tiered Backpacks 1.0.20. SSO's regular-Mending setting is still respected; no configuration or dependency is bypassed. The vanilla client retains Type A display/guards and is not given a native pouch GUI.
+
+## Build, review and limitations
+
+The release built with Java 25 Gradle and `-PcompilerVersion=27`, targeting Java 25 bytecode. Independent review checked injection descriptors against the original developer JAR, both-side menu sizing, configurable dimensions, item/component preservation and common mixin gating. The addon and Multi-Shim have no duplicate class paths.
+
+Install the updated addon on both server and native clients so menu geometry agrees. Existing attached netherite pouches work without detachment. The patch cannot recover items already discarded by an earlier undersized-container save. Existing attached items with a true tier marker are treated as netherite; an already-corrupted attachment has no reliable record of which historical ingredient was used. Shrinking configured dimensions below previously stored contents and arbitrary third-party accessory integrations are outside this fix.
+
+Tool Pouch has no separate Minecraft-version port in this release inventory. Optional developer SSO and the existing SSO port retain their independent inputs and verification. Earlier release artifacts and historical validation below are preserved; earlier results are not relabeled as new runs.
+
+---
+
 # Validation — 1.0.2+26.3
 
 Recorded 2026-10-02. Exact addon SHA-256:

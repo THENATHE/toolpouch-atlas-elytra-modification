@@ -37,9 +37,15 @@ Inventory pouches, leggings-attached pouches and open pouch menus are supported.
 
 **SSO's regular-Mending setting is respected.** If Simple Smithing Overhaul's Mending rework is enabled and `mendingRework.enableRegularMendingBehavior` is disabled, XP does not mend pouch Elytra either. Enable regular Mending in SSO when you want XP repair. This addon does not change your SSO configuration or require SSO to be installed.
 
+### Attached netherite pouch capacity
+
+Version 1.0.3 preserves the netherite pouch’s configured dimensions when attached to leggings: 5×5 by default, rather than the ordinary pouch’s 4×4. Menus, previews, quick transfers and gameplay inventory helpers use the same corrected dimensions on both sides. Existing attached netherite pouches are recognized without detaching them.
+
+Detaching a pouch clears its tier marker from the leggings. Attaching another pouch derives its tier from the actual ingredient, preventing a stale marker from turning an ordinary pouch into a netherite one. Existing configuration values and other item components remain intact. The fix prevents further truncation; it cannot recover contents already discarded by the original smaller inventory.
+
 ## Install
 
-Install `toolpouch-atlas-elytra-compat-1.0.2+26.3.jar` on **the server and participating modded clients**, alongside Tool Pouch 1.1.10 and its usual dependencies. Add MapStitch 1.1.6 when using the atlas features. The Elytra toggle works without MapStitch.
+Install `toolpouch-atlas-elytra-compat-1.0.3+26.3.jar` on **the server and participating modded clients**, alongside Tool Pouch 1.1.10 and its usual dependencies. Add MapStitch 1.1.6 when using the atlas features. The Elytra toggle works without MapStitch.
 
 | Dependency | Tested version | Role |
 | --- | --- | --- |
@@ -52,7 +58,7 @@ Install `toolpouch-atlas-elytra-compat-1.0.2+26.3.jar` on **the server and parti
 
 Use one Tool Pouch JAR and one MapStitch JAR, with matching mod builds on the server and native clients. This add-on does not contain or replace either original mod.
 
-For missing atlas seed-map centers and crafting corrections on a Multi-Shim server, also update [Multi-Shim](https://github.com/THENATHE/SSO-backpack-toolpouch-mapstitch-shim) to 1.0.3. The addon supplies controls/cache and XP Mending features; the server shim repairs atlas metadata/crafting and guards pouch-held shulkers against duplication and item loss.
+For missing atlas seed-map centers and crafting corrections on a Multi-Shim server, also update [Multi-Shim](https://github.com/THENATHE/SSO-backpack-toolpouch-mapstitch-shim) to 1.0.3. The addon supplies attached-pouch capacity, controls/cache and XP Mending fixes; the server shim repairs atlas metadata/crafting and guards pouch-held shulkers against duplication and item loss.
 
 ### Vanilla players on the same server
 
@@ -83,6 +89,6 @@ Use a Java 25 JDK. Place the compile-only dependency JARs listed in [libs/README
 ./gradlew build
 ```
 
-Windows: `gradlew.bat build`. Output: `build/libs/toolpouch-atlas-elytra-compat-1.0.2+26.3.jar`. Dependencies are not bundled. A newer compiler can target Java 25 with `-PcompilerVersion=27` while Gradle runs on Java 25.
+Windows: `gradlew.bat build`. Output: `build/libs/toolpouch-atlas-elytra-compat-1.0.3+26.3.jar`. Dependencies are not bundled. A newer compiler can target Java 25 with `-PcompilerVersion=27` while Gradle runs on Java 25.
 
-Version 1.0.2 adds actual XP-orb pickup tests, SSO-enabled/disabled controls, XP accounting, live-menu persistence and existing controls/atlas regressions. The original 1.0.0 record retains its 208 historical assertions. Read [the validation record](docs/VALIDATION.md) for exact tested artifacts, results and limits. Report problems specific to this modification in [this repository's issues](https://github.com/THENATHE/toolpouch-atlas-elytra-modification/issues).
+Version 1.0.3 adds native attached-capacity and tier-lifecycle regressions. Version 1.0.2 added actual XP-orb pickup tests, SSO-enabled/disabled controls, XP accounting, live-menu persistence and existing controls/atlas regressions. The original 1.0.0 record retains its 208 historical assertions. Read [the validation record](docs/VALIDATION.md) for exact tested artifacts, results and limits. Report problems specific to this modification in [this repository's issues](https://github.com/THENATHE/toolpouch-atlas-elytra-modification/issues).

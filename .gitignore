@@ -16,3 +16,8 @@ original-jar-checksums.json
 __pycache__/
 *.pyc
 .DS_Store
+
+!qa/attached-capacity/
+qa/attached-capacity/runs/
+qa/attached-capacity/**/classes/
+qa/attached-capacity/**/fixtures/

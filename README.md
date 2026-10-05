@@ -1,3 +1,7 @@
+> **Archived on 2026-10-04.** Future combined Minecraft 26.3 development continues in [Vanilla++ Quality of Life Suite](https://github.com/THENATHE/vanilla-plusplus-quality-of-life-suite). Existing standalone releases and source remain available here.
+>
+> The suite incorporates this component. Existing standalone installations remain a separate option; follow the suite installation instructions when migrating.
+
 # Tool Pouch Atlas & Elytra Modification
 
 An **unofficial gameplay modification** for [Tool Pouch](https://github.com/pajicadvance/toolpouch): use MapStitch atlases from your pouch and toggle pouch-powered Elytra flight, and mend stored wings with collected XP. Delivered as a separate Fabric add-on, it leaves the original Tool Pouch and MapStitch JARs intact.
